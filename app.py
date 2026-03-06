@@ -1,7 +1,7 @@
 from flask import Flask, render_template, jsonify, request
 from src.helper import download_hugging_face_embeddings
-from langchain_pinecone import PineconeVectorStore
-from langchain_groq import ChatGroq  # Changed from langchain_openai
+from langchain_chroma import Chroma  # Changed from langchain_pinecone
+from langchain_groq import ChatGroq
 from langchain.chains import create_retrieval_chain
 from langchain.chains.combine_documents import create_stuff_documents_chain
 from langchain_core.prompts import ChatPromptTemplate
@@ -9,36 +9,45 @@ from dotenv import load_dotenv
 from src.prompt import *
 import os
 
-
 app = Flask(__name__)
-
 
 load_dotenv()
 
-PINECONE_API_KEY=os.environ.get('PINECONE_API_KEY')
-GROQ_API_KEY=os.environ.get('GROQ_API_KEY')  # Changed from OPENAI_API_KEY
+# Removed PINECONE_API_KEY since we're using ChromaDB
+GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 
-os.environ["PINECONE_API_KEY"] = PINECONE_API_KEY
-os.environ["GROQ_API_KEY"] = GROQ_API_KEY  # Changed from OPENAI_API_KEY
-
+os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 embeddings = download_hugging_face_embeddings()
 
-index_name = "medical-chatbot" 
-# Embed each chunk and upsert the embeddings into your Pinecone index.
-docsearch = PineconeVectorStore.from_existing_index(
-    index_name=index_name,
-    embedding=embeddings
-)
+# Define the persistent directory for ChromaDB
+persist_directory = "./chroma_db"  # Local folder to store the vector database
 
-retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k":3})
+# Check if the ChromaDB exists and load it
+if os.path.exists(persist_directory):
+    # Load existing ChromaDB
+    docsearch = Chroma(
+        persist_directory=persist_directory,
+        embedding_function=embeddings
+    )
+    print("Loaded existing ChromaDB from", persist_directory)
+else:
+    # If no existing database, you'll need to create one
+    # This part would typically be in a separate script for ingesting documents
+    print("No existing ChromaDB found. Please run ingestion script first.")
+    # For now, create an empty one (you'll need to populate it)
+    docsearch = Chroma(
+        persist_directory=persist_directory,
+        embedding_function=embeddings
+    )
 
-# Changed from ChatOpenAI to ChatGroq
-# Available Groq models: "mixtral-8x7b-32768", "llama2-70b-4096", "gemma-7b-it", "llama3-70b-8192", "llama3-8b-8192"
+retriever = docsearch.as_retriever(search_type="similarity", search_kwargs={"k": 3})
+
+# Using Groq as before
 chatModel = ChatGroq(
-    model="llama3-70b-8192",  # or "llama3-70b-8192" for better performance
-    temperature=0.1,  # Added temperature for more consistent responses
-    max_tokens=1024,  # Added max tokens limit
+    model="llama-3.3-70b-versatile",  # Latest Llama model
+    temperature=0.1,
+    max_tokens=1024,
 )
 
 prompt = ChatPromptTemplate.from_messages(
@@ -66,6 +75,5 @@ def chat():
     print("Response : ", response["answer"])
     return str(response["answer"])
 
-
 if __name__ == '__main__':
-    app.run(host="0.0.0.0", port=8080, debug=True)
+    app.run(host="0.0.0.0", port=8080, debug=False, use_reloader=False) 
