@@ -1,5 +1,5 @@
 # Medi 1.0 
-
+Medi is an RAG based AI Assistant, which is targeted for medical questions. 
 ## How to run?
 ### STEPS:
 
