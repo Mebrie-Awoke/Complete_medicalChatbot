@@ -1,4 +1,4 @@
-# Build-a-Complete-Medical-Chatbot-with-LLMs-LangChain-Pinecone-Flask-AWS
+#Medi 1.0 ##Medical AI Assistant
 
 # How to run?
 ### STEPS:
@@ -6,7 +6,7 @@
 Clone the repository
 
 ```bash
-git clonehttps://github.com/entbappy/Build-a-Complete-Medical-Chatbot-with-LLMs-LangChain-Pinecone-Flask-AWS.git
+git clone https://github.com/Mebrie-Awoke/Complete_medicalChatbot
 ```
 ### STEP 01- Create a conda environment after opening the repository
 
