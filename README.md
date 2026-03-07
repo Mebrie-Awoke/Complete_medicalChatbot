@@ -1,6 +1,6 @@
-#Medi 1.0 ##Medical AI Assistant
+#Medi 1.0 
 
-# How to run?
+## How to run?
 ### STEPS:
 
 Clone the repository
@@ -8,7 +8,7 @@ Clone the repository
 ```bash
 git clone https://github.com/Mebrie-Awoke/Complete_medicalChatbot
 ```
-### STEP 01- Create a conda environment after opening the repository
+
 
 
 ### STEP 02- install the requirements
@@ -17,16 +17,16 @@ pip install -r requirements.txt
 ```
 
 
-### Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
+### Create a `.env` file in the root directory and add your groq Api Key as follows:
 
 ```ini
-PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+
+GROQ_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 ```
 
 
 ```bash
-# run the following command to store embeddings to pinecone
+# run the following command to store embeddings to chromadb
 python store_index.py
 ```
 
@@ -46,16 +46,9 @@ open up localhost:
 - Python
 - LangChain
 - Flask
-- GPT
-- Pinecone
+- GROQ
+- Chromadb
 
-
-
-# AWS-CICD-Deployment-with-Github-Actions
-
-## 1. Login to AWS console.
-
-## 2. Create IAM user for deployment
 
 	#with specific access
 
