@@ -27,7 +27,7 @@ GROQ_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
 
 ```bash
 # run the following command to store embeddings to chromadb
-python store_index.py
+python index.py
 ```
 
 ```bash
