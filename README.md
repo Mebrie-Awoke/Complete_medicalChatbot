@@ -1,6 +1,6 @@
 # Build-a-Complete-Medical-Chatbot-with-LLMs-LangChain-Pinecone-Flask-AWS 
 
-# How to run?   
+# How to run?    
 ### STEPS:  
 
 Clone the repository
