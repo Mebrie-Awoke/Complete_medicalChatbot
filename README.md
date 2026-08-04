@@ -1,122 +1,119 @@
-# Build-a-Complete-Medical-Chatbot-with-LLMs-LangChain-Pinecone-Flask-AWS 
+# Complete Medical Chatbot
 
-# How to run?      
-### STEPS:    
-   
-Clone the repository
+A Flask-based medical chatbot that uses Retrieval-Augmented Generation (RAG) with LangChain, ChromaDB, Groq, and Hugging Face embeddings to answer medical questions from PDF documents.
+
+## 🚀 What this project does
+
+- Loads medical PDF content from `data/`
+- Splits documents into semantic chunks with LangChain
+- Creates a persistent Chroma vector database in `chroma_db/`
+- Uses `langchain_groq` for chat-based answer generation
+- Serves a polished web chat interface via Flask
+
+## ✅ Features
+
+- Local ChromaDB vector store for fast semantic retrieval
+- Hugging Face sentence-transformer embeddings
+- PDF ingestion pipeline with chunking and metadata preservation
+- Simple chat UI in `templates/chat.html`
+- Dark/light theme toggle and quick question suggestions
+- Easy deployment via Flask on port `8080`
+
+## 📁 Project structure
+
+- `app.py` — Flask app and chat endpoint
+- `index.py` — build/rebuild the ChromaDB index from `data/`
+- `src/helper.py` — PDF loading, document filtering, text splitting, and embeddings loader
+- `src/prompt.py` — system prompt used to condition the chatbot
+- `templates/chat.html` — front-end chat interface
+- `static/style.css` — UI styling
+- `chroma_db/` — persistent local vector store
+- `data/` — place your input PDF files here
+
+## 🛠️ Requirements
+
+- Python 3.10 recommended
+- `pip install -r requirements.txt`
+
+## ⚙️ Setup
+
+1. Clone the repository:
 
 ```bash
-git clone https://github.com/Mebrie-Awoke/Complete_medicalChatbot/tree/main
+git clone https://github.com/Mebrie-Awoke/Complete_medicalChatbot.git
+cd Complete_medicalChatbot
 ```
-### STEP 01- Create a conda environment after opening the repository
+
+2. Create and activate a Python environment:
 
 ```bash
-conda create -n medibot python=3.10 -y
+python -m venv venv
+source venv/bin/activate
 ```
 
-```bash
-conda activate medibot
-```
+3. Install dependencies:
 
-### STEP 02- install the requirements
 ```bash
 pip install -r requirements.txt
 ```
 
-
-### Create a `.env` file in the root directory and add your Pinecone & openai credentials as follows:
+4. Create a `.env` file in the project root with your Groq API key:
 
 ```ini
-PINECONE_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
-OPENAI_API_KEY = "xxxxxxxxxxxxxxxxxxxxxxxxxxxxx"
+GROQ_API_KEY="your_groq_api_key"
 ```
 
+> Note: The current app uses `langchain_groq` and local ChromaDB. `PINECONE_API_KEY` is not required for the current setup.
+
+5. Add your medical PDF files to the `data/` directory.
+
+6. Build the vector index:
 
 ```bash
-# run the following command to store embeddings to pinecone
-python store_index.py
+python index.py
 ```
 
+7. Start the Flask app:
+
 ```bash
-# Finally run the following command
 python app.py
 ```
 
-Now,
-```bash
-open up localhost:
+8. Open the chat interface in your browser:
+
+```text
+http://localhost:8080
 ```
 
+## 💡 How it works
 
-### Techstack Used:
+- `index.py` loads all PDFs in `data/`
+- Documents are filtered and split into 500-token chunks with overlap
+- `HuggingFaceEmbeddings` generates embeddings for each chunk
+- ChromaDB stores the vectors persistently in `chroma_db/`
+- `app.py` loads the DB and creates a retriever
+- The user chat query triggers a retrieval step followed by generation from Groq
 
-- Python
-- LangChain
-- Flask
-- GPT
-- Pinecone
+## 🧪 Notes
 
+- If `chroma_db/` already exists, `app.py` will load it automatically
+- If there is no existing database, run `python index.py` first
+- The default Groq chat model is `llama-3.3-70b-versatile`
+- This is a research/demo chatbot, not medical advice
 
+## 🛠️ Troubleshooting
 
-# AWS-CICD-Deployment-with-Github-Actions
+- `ModuleNotFoundError`: Ensure you installed dependencies from `requirements.txt`
+- `No existing ChromaDB found`: Run `python index.py` to create the database
+- `Invalid API key`: Confirm `GROQ_API_KEY` is set in `.env`
 
-## 1. Login to AWS console.
+## 🙌 Credits
 
-## 2. Create IAM user for deployment
+Built by Mebrie Awoke.
 
-	#with specific access
+## 📌 License
 
-	1. EC2 access : It is virtual machine
-
-	2. ECR: Elastic Container registry to save your docker image in aws
-
-
-	#Description: About the deployment
-
-	1. Build docker image of the source code
-
-	2. Push your docker image to ECR
-
-	3. Launch Your EC2 
-
-	4. Pull Your image from ECR in EC2
-
-	5. Lauch your docker image in EC2
-
-	#Policy:
-
-	1. AmazonEC2ContainerRegistryFullAccess
-
-	2. AmazonEC2FullAccess
-
-	
-## 3. Create ECR repo to store/save docker image
-    - Save the URI: 315865595366.dkr.ecr.us-east-1.amazonaws.com/medicalbot
-
-	
-## 4. Create EC2 machine (Ubuntu) 
-
-## 5. Open EC2 and Install docker in EC2 Machine:
-	
-	
-	#optinal
-
-	sudo apt-get update -y
-
-	sudo apt-get upgrade
-	
-	#required
-
-	curl -fsSL https://get.docker.com -o get-docker.sh
-
-	sudo sh get-docker.sh
-
-	sudo usermod -aG docker ubuntu
-
-	newgrp docker
-	
-# 6. Configure EC2 as self-hosted runner:
-    setting>actions>runner>new self hosted runner> choose os> then run command one by one
+This repository does not include a license file. Add one if you want to open source it.
  
 
 
