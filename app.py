@@ -13,19 +13,14 @@ app = Flask(__name__)
 
 load_dotenv()
 
-# Removed PINECONE_API_KEY since we're using ChromaDB
 GROQ_API_KEY = os.environ.get('GROQ_API_KEY')
 
 os.environ["GROQ_API_KEY"] = GROQ_API_KEY
 
 embeddings = download_hugging_face_embeddings()
 
-# Define the persistent directory for ChromaDB
-persist_directory = "./chroma_db"  # Local folder to store the vector database
-
-# Check if the ChromaDB exists and load it
+persist_directory = "./chroma_db"  
 if os.path.exists(persist_directory):
-    # Load existing ChromaDB
     docsearch = Chroma(
         persist_directory=persist_directory,
         embedding_function=embeddings
