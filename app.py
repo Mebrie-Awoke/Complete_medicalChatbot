@@ -27,10 +27,7 @@ if os.path.exists(persist_directory):
     )
     print("Loaded existing ChromaDB from", persist_directory)
 else:
-    # If no existing database, you'll need to create one
-    # This part would typically be in a separate script for ingesting documents
     print("No existing ChromaDB found. Please run ingestion script first.")
-    # For now, create an empty one (you'll need to populate it)
     docsearch = Chroma(
         persist_directory=persist_directory,
         embedding_function=embeddings
